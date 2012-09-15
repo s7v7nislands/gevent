@@ -27,6 +27,10 @@ elif test_name == 'test_threading':
     import test
     import lock_tests
     test.lock_tests = lock_tests
+elif test_name == 'test_thread':
+    import test
+    import lock_tests
+    test.lock_tests = lock_tests
 
 
 exec module_code in globals()
