@@ -1,34 +1,10 @@
 import sys
 import os
 import glob
-import subprocess
-import time
+from util import run
 
 
-def wait(popen, name, timeout=120):
-    endtime = time.time() + timeout
-    try:
-        while True:
-            if popen.poll() is not None:
-                return popen.poll()
-            time.sleep(0.5)
-            if time.time() > endtime:
-                break
-    finally:
-        if popen.poll() is None:
-            sys.stderr.write('\nKilling %s (timed out)\n' % name)
-            try:
-                popen.kill()
-            except OSError:
-                pass
-            sys.stderr.write('\n')
-    return 'TIMEOUT'
-
-
-def run(command):
-    popen = subprocess.Popen(command)
-    name = ' '.join(command)
-    return wait(popen, name)
+TIMEOUT = 120
 
 
 version = '%s.%s.%s' % sys.version_info[:3]
@@ -56,19 +32,16 @@ if not tests:
     tests = set(glob.glob('test_*.py')) - set(['test_support.py'])
     tests = sorted(tests)
 
-
-for test in tests:
+for filename in tests:
     total += 1
-    if run([sys.executable, '-u', '-m', 'monkey_test', test]):
-        failed.append(test)
+    if run([sys.executable, '-u', '-m', 'monkey_test', filename], TIMEOUT):
+        failed.append(filename)
 
-    if 'Event' in open(test).read():
-        total += 1
-        if run([sys.executable, '-u', '-m', 'monkey_test', '--Event', test]):
-            failed.append(test + '/Event')
+    total += 1
+    if run([sys.executable, '-u', '-m', 'monkey_test', '--Event', filename], TIMEOUT):
+        failed.append(filename + '/Event')
 
 os.system('rm -f @test_*_tmp')
-
 
 if failed:
     sys.stderr.write('%s/%s tests failed: %s\n' % (len(failed), total, failed))
