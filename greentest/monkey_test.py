@@ -6,6 +6,8 @@ kwargs = {}
 if sys.argv[1] == '--Event':
     kwargs['Event'] = True
     del sys.argv[1]
+else:
+    kwargs['Event'] = False
 
 test_filename = sys.argv[1]
 del sys.argv[1]
