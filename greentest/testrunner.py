@@ -20,7 +20,7 @@ for filename in tests:
 
 
 if failed:
-    log('%s/%s tests failed:\n- %s', len(failed), total, '\n- '.join(failed))
+    log('\n%s/%s tests failed:\n- %s', len(failed), total, '\n- '.join(failed))
     sys.exit(1)
 else:
-    log('%s tests passed', total)
+    log('\n%s tests passed', total)
