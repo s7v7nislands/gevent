@@ -68,8 +68,6 @@ def wait(popen, name, timeout):
             if time.time() > endtime:
                 break
     finally:
-        if popen.poll() is None:
-            log('\nKilling %r (timed out)', name)
         # we kill anyway, in case some children continue
         kill(popen)
     return 'TIMEOUT'
@@ -81,7 +79,13 @@ def run(command, timeout):
         preexec_fn = getattr(os, 'setpgrp', None)
     if preexec_fn is not None:
         os.environ['GREENTEST_MONITORED_GROUP'] = '1'
+    name = ' '.join(command)
+    log('\nRunning %s', name)
     popen = subprocess.Popen(command, preexec_fn=preexec_fn)
     popen.setpgrp_enabled = preexec_fn is not None
-    name = ' '.join(command)
-    return wait(popen, name, timeout)
+    result = wait(popen, name, timeout)
+    if result:
+        log('\n%s failed with code %s', name, result)
+    else:
+        log('\n%s succeeded', name)
+    return result
