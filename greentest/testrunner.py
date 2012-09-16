@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import glob
-from util import run
+from util import run, log
 
 
 TIMEOUT = 600
@@ -20,7 +20,7 @@ for filename in tests:
 
 
 if failed:
-    sys.stderr.write('%s/%s tests failed: %s\n' % (len(failed), total, failed))
+    log('%s/%s tests failed:\n- %s', len(failed), total, '\n- '.join(failed))
     sys.exit(1)
 else:
-    sys.stderr.write('%s tests passed\n' % total)
+    log('%s tests passed', total)
