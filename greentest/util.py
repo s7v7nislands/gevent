@@ -62,9 +62,9 @@ def wait(popen, name, timeout):
     endtime = time.time() + timeout
     try:
         while True:
+            time.sleep(0.1)
             if popen.poll() is not None:
                 return popen.poll()
-            time.sleep(0.1)
             if time.time() > endtime:
                 break
     finally:
