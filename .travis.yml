@@ -2,6 +2,12 @@ language: python
 python:
   - "2.6"
   - "2.7"
+env:
+  - GEVENT_RESOLVER=ares
+  - GEVENT_RESOLVER=ares GEVENT_BACKEND=signalfd
+  - GEVENT_RESOLVER=ares GEVENT_FILE=thread
+  - GEVENT_BACKEND=select,signalfd,nosigmask
+  - GEVENT_BACKEND=poll
 install:
  - pip install cython greenlet psycopg2 pysendfile web.py -q --use-mirrors
  - cython --version
