@@ -1,9 +1,7 @@
 language: python
 python:
-#  - "2.5"
-#  - "2.6"
+  - "2.6"
   - "2.7"
-#  - "3.2"
 install:
  - pip install cython greenlet psycopg2 pysendfile web.py -q --use-mirrors
  - cython --version
